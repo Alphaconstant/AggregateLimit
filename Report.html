@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggregate Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .tab-content {
+            padding: 20px;
+            display: none;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div id="aggregate-report" class="tab-content" style="display: block;">
+    <h1>Generate Aggregate Report</h1>
+    <div class="form-container">
+        <label for="reportDate">Generate Report as of Date:</label>
+        <input type="date" id="reportDate" class="date-picker">
+        <button onclick="generateAggregateReport()">Generate Report</button>
+    </div>
+    <br>
+    <label>AS OF DATE</label>
+    <table>
+        <thead>
+            <tr>
+                <th>Sno</th>
+                <th>Week of the Year</th>
+                <th>As of Date</th>
+                <th>Batch</th>
+                <th>Carrier Name</th>
+                <th>Contract Number</th>
+                <th>State</th>
+                <th>Zone</th>
+                <th>Aggregate Limit</th>
+                <th>Inforce TIV</th>
+                <th>Aggregate Available</th>
+                <th>% Utilized</th>
+            </tr>
+        </thead>
+        <tbody id="reportTableBody">
+            <!-- Dynamic rows will be added here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function generateAggregateReport() {
+        const reportDate = document.getElementById('reportDate').value;
+        if (!reportDate) {
+            alert('Please select a date to generate the report.');
+            return;
+        }
+
+        const tbody = document.getElementById('reportTableBody');
+        tbody.innerHTML = ''; // Clear any existing rows
+
+        // Fetch and parse data from local storage
+        const data = JSON.parse(localStorage.getItem('transactions')) || [];
+
+        data.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td>Week ${new Date(reportDate).getWeek()}</td>
+                <td>${reportDate}</td>
+                <td>Batch ${Math.ceil((index + 1) / 10)}</td>
+                <td>${row.carrierName}</td>
+                <td>${row.contractNumber}</td>
+                <td>${row.state}</td>
+                <td>${row.zone}</td>
+                <td>$10M</td>
+                <td>${row.inforceTIV.toFixed(2)}</td>
+                <td>${(10000000 - row.inforceTIV).toFixed(2)}</td>
+                <td>${((row.inforceTIV / 10000000) * 100).toFixed(2)}%</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Helper function to get the week number from a date
+    Date.prototype.getWeek = function () {
+        const start = new Date(this.getFullYear(), 0, 1);
+        const days = Math.floor((this - start) / (24 * 60 * 60 * 1000));
+        return Math.ceil((days + 1) / 7);
+    };
+</script>
+
+</body>
+</html>

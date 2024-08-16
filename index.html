@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggregate Capacity Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Menu</h2>
+        <a href="#" onclick="navigateToTab('aggregate-console')">Aggregate Console</a>
+    </div>
+    <div class="main-content">
+        <div id="aggregate-console" class="tab-content active">
+            <div class="tabs">
+                <div class="tab active" onclick="showTab('aggregate-dashboard')">Aggregate Dashboard</div>
+                <div class="tab hreflink" onclick="showTab('aggregate-report')"><a class="hreflink" href="Report.html">Aggregate Report</a></div>
+                <div class="tab" onclick="showTab('aggregate-batch')">Aggregate Batch</div>
+            </div>
+            <div id="aggregate-dashboard" class="tab-content active">
+                <h1>Aggregate Capacity Dashboard</h1>
+                <div class="chart-container">
+                    <canvas id="aggregateChart"></canvas>
+                    <p id="aggregateCapacityDisplay" class="text-centre">Aggregate Capacity: $10M</p>
+                </div>
+                <div class="form-container">
+                    <div>
+                        <label for="carrierName">Carrier Name:</label>
+                        <select id="carrierName" onchange="updateContractNumber()">
+                            <option value="">Select Carrier</option>
+                            <option value="Coastal London">Coastal London</option>
+                            <option value="Inland London">Inland London</option>
+                            <option value="New Condo">New Condo</option>
+                            <option value="Canopius_NonVave">Canopius_NonVave</option>
+                            <option value="Canopius_Vave">Canopius_Vave</option>
+                            <option value="Markel">Markel</option>
+                            <option value="Nationwide">Nationwide</option>
+                            <option value="Canopius Lloyds">Canopius Lloyds</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="contractNumber">Contract Number:</label>
+                        <input type="text" id="contractNumber" readonly>
+                    </div>
+                    <div>
+                        <label for="state">State:</label>
+                        <select id="state">
+                            <option value="">Select State</option>
+                            <option value="AL">AL</option>
+                            <option value="DE">DE</option>
+                            <!-- More states -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="zone">Zone:</label>
+                        <select id="zone">
+                            <option value="">Select Zone</option>
+                            <option value="ALL">ALL</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="inforceTIV">Inforce TIV ($):</label>
+                        <input type="number" id="inforceTIV">
+                    </div>
+                    <div>
+                        <label for="county">County:</label>
+                        <select id="county" onchange="updateZipcode()">
+                            <option value="Cook County">Cook County</option>
+                            <option value="Los Angeles County">Los Angeles County</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="zipcode">Zipcode:</label>
+                        <input type="text" id="zipcode" readonly>
+                    </div>
+                    <div>
+                        <label for="city">City:</label>
+                        <input type="text" id="city">
+                    </div>
+                    <div>
+                        <button onclick="addTransaction()">Add Transaction</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sno</th>
+                            <th>Policy Number</th>
+                            <th>Carrier Name</th>
+                            <th>Contract Number</th>
+                            <th>State</th>
+                            <th>Zone</th>
+                            <th>Tier</th>
+                            <th>County</th>
+                            <th>City</th>
+                            <th>Zipcode</th>
+                            <th>Aggregate Limit</th>
+                            <th>Inforce TIV</th>
+                            <th>Aggregate Available</th>
+                            <th>% Utilized</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="policyTableBody">
+                        <!-- Dynamic rows will be added here -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="aggregate-report" class="tab-content">
+                <h1>Generate Aggregate Report</h1>
+                <div class="form-container">
+                    <label for="reportDate">Generate Report as of Date:</label>
+                    <input type="date" id="reportDate" class="date-picker">
+                    <button onclick="generateAggregateReport()">Generate Report</button>
+                </div>
+            </div>
+            <div id="aggregate-batch" class="tab-content">
+                <h1>Aggregate Batch</h1>
+                <div class="form-container">
+                    <label for="batchDate">Batch Executed Date:</label>
+                    <input type="date" id="batchDate" class="date-picker">
+                    <button onclick="downloadBatchDetails()">Download Batch Details</button>
+                </div>
+            </div>
+        </div>
+        <button class="save-button" onclick="downloadCSV()">Save</button>
+        <div class="chart-container">
+            <canvas id="dynamicPieChart" style="display: none;"></canvas>
+        </div>
+    </div>
+   
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+</html>
